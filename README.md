@@ -1,12 +1,25 @@
-# Flarum
+## 👋 Welcome to flarum 🚀
 
-A self-hosted flarum application.
+Modern, fast, and elegant forum software
 
-## Installation
+## 📋 Description
+
+Modern, fast, and elegant forum software
+
+## 🚀 Services
+
+- **flarum**: mondedie/flarum:latest
+
+### Infrastructure Components
+
+- **flarum-db**: Mariadb database
+
+
+## 📦 Installation
 
 ### Option 1: Quick Install
 ```bash
-curl -q -LSsf "https://raw.githubusercontent.com/composemgr/flarum/main/docker-compose.yaml" | docker compose -f - up -d
+curl -q -LSsf "https://raw.githubusercontent.com/composemgr/flarum/main/docker-compose.yaml" -o compose.yml
 ```
 
 ### Option 2: Git Clone
@@ -21,10 +34,65 @@ docker compose up -d
 composemgr install flarum
 ```
 
-## Configuration
+## 🔧 Configuration
 
-See docker-compose.yaml for environment variables and configuration options.
+### Environment Variables
 
-## Documentation
+```shell
+TZ=America/New_York
+```
 
-Check the official project documentation for detailed setup and usage information.
+See `docker-compose.yaml` for complete list of configurable options.
+
+## 🌐 Access
+
+- **Web Interface**: http://172.17.0.1:8085
+
+## 📂 Volumes
+
+- `./rootfs/data/flarum` - Data storage
+- `./rootfs/config/flarum` - Data storage
+- `./rootfs/data/db/mariadb/flarum` - Data storage
+
+## 🔐 Security
+
+- Change all default passwords before deploying to production
+- Use strong secrets for all authentication tokens
+- Configure HTTPS using a reverse proxy (nginx, traefik, caddy)
+- Regularly update Docker images for security patches
+- Backup your data regularly
+
+## 🔍 Logging
+
+```shell
+docker compose logs -f flarum
+```
+
+## 🛠️ Management
+
+```bash
+# Start services
+docker compose up -d
+
+# Stop services
+docker compose down
+
+# Update to latest images
+docker compose pull && docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Restart services
+docker compose restart
+```
+
+## 📋 Requirements
+
+- Docker Engine 20.10+
+- Docker Compose V2+
+
+## 🤝 Author
+
+🤖 casjay: [Github](https://github.com/casjay) 🤖  
+🦄 composemgr: [Github](https://github.com/composemgr) 🦄
