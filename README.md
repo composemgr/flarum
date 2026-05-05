@@ -50,9 +50,9 @@ See `docker-compose.yaml` for complete list of configurable options.
 
 ## 📂 Volumes
 
-- `./rootfs/data/flarum` - Data storage
-- `./rootfs/config/flarum` - Data storage
-- `./rootfs/data/db/mariadb/flarum` - Data storage
+- `./volumes/data/flarum` - Data storage
+- `./volumes/config/flarum` - Data storage
+- `./volumes/data/db/mariadb/flarum` - Data storage
 
 ## 🔐 Security
 
