@@ -19,8 +19,8 @@ services:
     environment:
       TZ: ${TZ:-America/New_York}
     volumes:
-      - ./rootfs/data/flarum:/data
-      - ./rootfs/config/flarum:/config
+      - ./volumes/data/flarum:/data
+      - ./volumes/config/flarum:/config
     depends_on:
       - flarum-db
     healthcheck:
@@ -43,7 +43,7 @@ services:
       MARIADB_PASSWORD: ${DB_USER_PASS:-changeme_db_password}
       MARIADB_ROOT_PASSWORD: ${DB_ADMIN_PASS:-changeme_root_password}
     volumes:
-      - ./rootfs/data/db/mariadb/flarum:/var/lib/mysql
+      - ./volumes/data/db/mariadb/flarum:/var/lib/mysql
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 30s
