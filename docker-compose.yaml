@@ -19,7 +19,7 @@ services:
       - proxy
       - cloudflare
     ports:
-      - "172.17.0.1:8085:80"
+      - "172.17.0.1:8085:8888"
     environment:
       TZ: ${TZ:-America/New_York}
       FORUM_URL: http://${BASE_HOST_NAME:-localhost}:8085
@@ -40,7 +40,7 @@ services:
     depends_on:
       - flarum-db
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      test: ["CMD", "curl", "-f", "http://localhost:8888"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -48,7 +48,7 @@ services:
       - 'traefik.enable=true'
       - 'cloudflare.enable=true'
       - 'traefik.docker.network=proxy'
-      - 'cloudflare.service=http://flarum-app:80'
+      - 'cloudflare.service=http://flarum-app:8888'
       - 'cloudflare.hostname=flarum.${CLOUDFLARE_ZONE_NAME:-}'
       - 'traefik.http.routers.flarum-app.entrypoints=http'
       - 'traefik.http.routers.flarum-app-secure.tls=true'
@@ -59,7 +59,7 @@ services:
       - 'traefik.http.routers.flarum-app-secure.rule=Host($(${BASE_HOST_NAME:-$HOSTNAME}))'
       - 'traefik.http.routers.flarum-app-secure.tls.certresolver=cloudflare'
       - 'traefik.http.routers.flarum-app-secure.service=flarum-app'
-      - 'traefik.http.services.flarum-app.loadbalancer.server.port=80'
+      - 'traefik.http.services.flarum-app.loadbalancer.server.port=8888'
 
   flarum-db:
     image: mariadb:latest
