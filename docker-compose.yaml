@@ -30,7 +30,7 @@ services:
       DB_PASS: ${DB_USER_PASS:-changeme_db_password}
       FLARUM_ADMIN_USER: ${APP_ADMIN_USER:-admin}
       FLARUM_ADMIN_PASS: ${APP_ADMIN_PASS:-changeme_admin_password}
-      FLARUM_ADMIN_MAIL: ${APP_ADMIN_EMAIL:-admin@example.com}
+      FLARUM_ADMIN_MAIL: ${APP_ADMIN_USER:-admin@example.com}
       FLARUM_TITLE: ${APP_ORG_NAME:-Flarum}
       CONTAINER_NAME: flarum-app
       HOSTNAME: ${BASE_HOST_NAME:-$HOSTNAME}
