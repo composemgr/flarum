@@ -16,6 +16,8 @@ services:
     logging: *default-logging
     networks:
       - flarum
+      - proxy
+      - cloudflare
     ports:
       - "172.17.0.1:8085:80"
     environment:
@@ -30,6 +32,8 @@ services:
       FLARUM_ADMIN_PASS: ${APP_ADMIN_PASS:-changeme_admin_password}
       FLARUM_ADMIN_MAIL: ${APP_ADMIN_EMAIL:-admin@example.com}
       FLARUM_TITLE: ${APP_ORG_NAME:-Flarum}
+      CONTAINER_NAME: flarum-app
+      HOSTNAME: ${BASE_HOST_NAME:-$HOSTNAME}
     volumes:
       - ./volumes/data/flarum:/flarum/app/public/assets
       - ./volumes/config/flarum:/flarum/app/extensions
@@ -40,6 +44,22 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    labels:
+      - 'traefik.enable=true'
+      - 'cloudflare.enable=true'
+      - 'traefik.docker.network=proxy'
+      - 'cloudflare.service=http://flarum-app:80'
+      - 'cloudflare.hostname=flarum.${CLOUDFLARE_ZONE_NAME:-}'
+      - 'traefik.http.routers.flarum-app.entrypoints=http'
+      - 'traefik.http.routers.flarum-app-secure.tls=true'
+      - 'traefik.http.routers.flarum-app.rule=Host($(${BASE_HOST_NAME:-$HOSTNAME}))'
+      - 'traefik.http.middlewares.flarum-app-https-redirect.redirectscheme.scheme=https'
+      - 'traefik.http.routers.flarum-app.middlewares=flarum-app-https-redirect'
+      - 'traefik.http.routers.flarum-app-secure.entrypoints=https'
+      - 'traefik.http.routers.flarum-app-secure.rule=Host($(${BASE_HOST_NAME:-$HOSTNAME}))'
+      - 'traefik.http.routers.flarum-app-secure.tls.certresolver=cloudflare'
+      - 'traefik.http.routers.flarum-app-secure.service=flarum-app'
+      - 'traefik.http.services.flarum-app.loadbalancer.server.port=80'
 
   flarum-db:
     image: mariadb:latest
@@ -55,6 +75,7 @@ services:
       MARIADB_USER: ${DB_USER_NAME:-flarum}
       MARIADB_PASSWORD: ${DB_USER_PASS:-changeme_db_password}
       MARIADB_ROOT_PASSWORD: ${DB_ADMIN_PASS:-changeme_admin_password}
+      CONTAINER_NAME: flarum-db
     volumes:
       - ./volumes/data/db/mariadb/flarum:/var/lib/mysql
     healthcheck:
@@ -67,3 +88,7 @@ networks:
   flarum:
     name: flarum
     external: false
+  proxy:
+    external: true
+  cloudflare:
+    external: true
